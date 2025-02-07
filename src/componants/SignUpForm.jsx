@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const API_URL = "https://fsa-jwt-practice.herokuapp.com"; // Base API URL
+const API_URL = "https://fsa-jwt-practice.herokuapp.com/signup"; // Base API URL
 
 const SignUpForm = () => {
   const [username, setUsername] = useState(""); 
