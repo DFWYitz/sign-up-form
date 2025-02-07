@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
-const API_URL = "https://fsa-jwt-practice.herokuapp.com/signup"; // Base API URL
+const API_URL = "https://fsa-jwt-practice.herokuapp.com/"; // Base API URL
 
 const SignUpForm = () => {
-  const [username, setUsername] = useState(""); 
-  const [password, setPassword] = useState(""); 
-  const [error, setError] = useState(null); 
-  const [success, setSuccess] = useState(null); 
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [token, setToken] = useState(null); // State to store JWT token
   const [loggedInUser, setLoggedInUser] = useState(null); // Store authenticated user info
 
@@ -21,7 +21,7 @@ const SignUpForm = () => {
     setSuccess(null);
 
     try {
-      const response = await fetch(`${API_URL}/signup`, {
+      const response = await fetch(`${API_URL}signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,7 +30,7 @@ const SignUpForm = () => {
       });
 
       const data = await response.json();
-
+      console.log(data)
       if (!response.ok) {
         throw new Error(data.error || "Signup failed");
       }
@@ -39,7 +39,7 @@ const SignUpForm = () => {
       console.log("Signup successful:", data);
 
       // Call authenticate function to log in the user
-      authenticateUser();
+      authenticateUser(data.token);
     } catch (err) {
       setError(err.message);
       console.error("Signup error:", err.message);
@@ -47,14 +47,15 @@ const SignUpForm = () => {
   };
 
   // Authenticate user and retrieve JWT token
-  const authenticateUser = async () => {
+  const authenticateUser = async (token) => {
     try {
-      const response = await fetch(`${API_URL}/authenticate`, {
-        method: "POST",
+      const response = await fetch(`${API_URL}authenticate`, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ username, password }),
+
       });
 
       const data = await response.json();
